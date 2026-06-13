@@ -216,3 +216,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+/unsloth_compiled_cache
+
+/_tmp_unsloth_main
+/_tmp_unsloth
