@@ -25,6 +25,8 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(SCRIPT_DIR)  # Projekt-PJN
 DATASET_DIR = os.path.join(PROJECT_DIR, "dataset")
 
+from qwen_peft_load import load_qwen_peft_model
+
 QWEN_ADAPTER_DIR = os.path.join(PROJECT_DIR, "qwen3-5-4b-polish-rap-classifier")
 GEMMA_ADAPTER_DIR = os.path.join(PROJECT_DIR, "gemma4-e2b-polish-rap-classifier")
 
@@ -93,11 +95,10 @@ def run_qwen_inference(verses: list[dict], label2id, id2label) -> list[dict]:
 
     os.environ["UNSLOTH_DISABLE_FAST_GENERATION"] = "1"
     from unsloth import FastModel
-    from peft import PeftModel
     from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
     DEVICE = get_device()
-    MAX_LENGTH = 600
+    MAX_LENGTH = 650  # jak w trening-qwen.ipynb
     NUM_LABELS = len(label2id)
     use_16bit = DEVICE != "cpu"
 
@@ -117,7 +118,7 @@ def run_qwen_inference(verses: list[dict], label2id, id2label) -> list[dict]:
         device_map="auto",
     )
 
-    model = PeftModel.from_pretrained(model, QWEN_ADAPTER_DIR)
+    model = load_qwen_peft_model(model, QWEN_ADAPTER_DIR)
     model.eval()
 
     tokenizer = AutoTokenizer.from_pretrained(QWEN_ADAPTER_DIR)
