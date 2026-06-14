@@ -1,0 +1,198 @@
+{
+  "seed": 8390,
+  "count": 10,
+  "questions": [
+    {
+      "id": 0,
+      "verse": "Autotune, antares, minor (minor)\nŻycie było prawie chwilą (chwilą)\nZiomal twój mnie prawie minął\nPonoć dalej nosi stare VLONE\nCzłowiek mój jak tarantino\nKręci to kręci, aż leci na wyro\nZnajdziesz w klubie prawie miłość\nWolisz wódę chlać czy wino? (x3)\n(Wino na bank)",
+      "song": "VLONE",
+      "section": "refren",
+      "correct_artist": "Zeamsone",
+      "qwen_prediction": "Żabson",
+      "qwen_confidence": 0.3906,
+      "gemma_prediction": "Zeamsone",
+      "gemma_confidence": 0.7969,
+      "options": [
+        "Young Igi",
+        "Zeamsone",
+        "Żabson",
+        "Pezet"
+      ]
+    },
+    {
+      "id": 1,
+      "verse": "Moi ludzie są ze mną, twoi ludzie są za mną\nA jeśli są przedemną no to idą nam po alko",
+      "song": "O.T.F",
+      "section": "bridge & hook",
+      "correct_artist": "Bedoes",
+      "qwen_prediction": "Kabe",
+      "qwen_confidence": 0.7266,
+      "gemma_prediction": "Louis Villain",
+      "gemma_confidence": 0.1816,
+      "options": [
+        "Louis Villain",
+        "Kabe",
+        "Bedoes",
+        "Malik Montana"
+      ]
+    },
+    {
+      "id": 2,
+      "verse": "Tu życie płynie, spójrz na ulice w dymie\nNa dzieciaków, spójrz, jaki mieć atut\nBo to miasto słynie z braku słów (Z tych dachów kurz)\nObrazów zbiór, te okna mówią wiele\nTo uliczny dogmat, po którym (Wiatr w oczy wieje znów)\nSzelest zabrał im nadzieje w walce z betonową dżunglą\nKtoś ich wytknął palcem (Chęć mieli, podkręcili boombox)\nTo szczere gówno, rap jak skalpel przeciął mój blok\nWiesz, co mówią? Że światła miasta wrzeszczą z ulgą (Ta, aha, yo)\n(Wiesz, co mówią? Że światła miasta gdzieś stąd pójdą)",
+      "song": "Mantra (2002)",
+      "section": "zwrotka",
+      "correct_artist": "Pezet",
+      "qwen_prediction": "Louis Villain",
+      "qwen_confidence": 0.3477,
+      "gemma_prediction": "Pezet",
+      "gemma_confidence": 0.1846,
+      "options": [
+        "Avi",
+        "Louis Villain",
+        "Pezet",
+        "Sentino"
+      ]
+    },
+    {
+      "id": 3,
+      "verse": "Ciągnę se mąkę ciągle, ciągle\nCiągnę se mąkę yeah\nCiągnę se mąkę ciągle, ciągle\nCiągnę se mąkę ciągle, ciągle\nCiągnę se mąkę\nNawet teraz z tego ciągnę ciągle",
+      "song": "Ciągnę se mąkę",
+      "section": "intro",
+      "correct_artist": "Bedoes",
+      "qwen_prediction": "Kabe",
+      "qwen_confidence": 0.7227,
+      "gemma_prediction": "Young Igi",
+      "gemma_confidence": 0.291,
+      "options": [
+        "Kabe",
+        "Young Igi",
+        "Bedoes",
+        "Pezet"
+      ]
+    },
+    {
+      "id": 4,
+      "verse": "Nagle oni chętni aby wеjść na low\nKażdy taki przedni i każdy to so (wow)\nPozamiata każdy kurz, każdy pijar taki ważny\nLecz nie zadbasz o ten swój\nTeraz drogą jest by gromadzić każdy nowy trud\nCud weźmy ich i kopmy wszystkich tak jak grób\nNa ich ustach miód by móc przylepiać każdy ruch\nWiesz nastaw nos by wyczuć każdy nowy plus\nWszyscy skaczą w rytm, gdy tylko tupnie któryś but",
+      "song": "Dyktator",
+      "section": "refren",
+      "correct_artist": "Sobel",
+      "qwen_prediction": "Zeamsone",
+      "qwen_confidence": 0.377,
+      "gemma_prediction": "Sobel",
+      "gemma_confidence": 0.9609,
+      "options": [
+        "Louis Villain",
+        "Kabe",
+        "Zeamsone",
+        "Sobel"
+      ]
+    },
+    {
+      "id": 5,
+      "verse": "Przejmujemy kontrole nad salą\nAż majki się palą, majki - scena\nPierwsze rzędy oblane gorzałą\nJakbym w Monako trofeum odbierał\nKolejka od fanek, zabieram je potem do studia\nMusze mieć chórki dograne\nJak gwiazda rocka rozpieprzam mikser stojakiem\nNo i z tej (cośtam) a nikt mnie nie łapie",
+      "song": "Trach bum beng (DJ Farad remix)",
+      "section": "zwrotka",
+      "correct_artist": "Diho",
+      "qwen_prediction": "Żabson",
+      "qwen_confidence": 0.3887,
+      "gemma_prediction": "Diho",
+      "gemma_confidence": 0.8594,
+      "options": [
+        "Kabe",
+        "Żabson",
+        "Zeamsone",
+        "Diho"
+      ]
+    },
+    {
+      "id": 6,
+      "verse": "Dupy stoją w kolejce jak na przecenie w Rossmanie\nNie gardzą tym mięsem jak wegetarianie\nChcą kiełbasę i jajka jak na angielskie śniadanie\nI lanie chcą w nagrodę, nie karę\nTy masz chuja jak krewetkę, twoja cyce jak kalmary\nJa ją łapie za odwłok jak homary\nDziś założę jej jaja na nosie jak okulary\nDużą wieże mam dla niej jak Paryż\nŚwinie czekają na rznięcie jakbym prowadził masarnie\nCo drugiej leci z cipy jakby miała tam fontannę\nDziwne pozycje na mokrym prześcieradle\nNie pożyczyłem i też nie ukradłem\nTy się im rzucasz na szyje jak szalik\nJa paląc mogę dać jej popalić\nBo oprócz nerwów, mam jeszcze coś ze stali\nTo kutas, jestem na fali",
+      "song": "Frugo",
+      "section": "zwrotka",
+      "correct_artist": "Diho",
+      "qwen_prediction": "Żabson",
+      "qwen_confidence": 0.4707,
+      "gemma_prediction": "Diho",
+      "gemma_confidence": 0.9883,
+      "options": [
+        "Malik Montana",
+        "Żabson",
+        "Pezet",
+        "Diho"
+      ]
+    },
+    {
+      "id": 7,
+      "verse": "Jesienne słońce i żółte liście\nMój numer na liście\nTwoje oczy się cieszą wciąż\nA nie atmosfera, że wszędzie afera\nŻe można ją nożem ciąć\nJa znam tamto miejsce i nie jest na wyspie, i może na szczęście\nBo nawet na wyspie los może nakręcić los i możesz tam spaść\nNie możesz tam spać\nJedyne wyjście to wyjście stąd oknem na świat\nGdzie może jest morze i może jest sad, wiesz\nByło już mało i gorzej, więc teraz jest dużo i dobrze, i świat\nZwiedzamy rooftopy, oliwka do drinka\nZachody i zorze, i wiatr\nŚwiat, jak z rolki na insta\nNa niebie jest tinta bez filtra\nZachody i zorze, i może gdzieś morze, i wiatr\nŚwiat jak z rolki na insta\nNa niebie jest tinta bez filtra\nZachody i zorze, i może gdzieś może, i wiatr",
+      "song": "Zachody i zorze",
+      "section": "zwrotka",
+      "correct_artist": "Pezet",
+      "qwen_prediction": "Pezet",
+      "qwen_confidence": 0.4707,
+      "gemma_prediction": "Young Leosia",
+      "gemma_confidence": 0.25,
+      "options": [
+        "Pezet",
+        "White 2115",
+        "Mata",
+        "Young Leosia"
+      ]
+    },
+    {
+      "id": 8,
+      "verse": "Biegam se z pełną samarą\nMelanżowy hotel był jak w Las Vegas Parano\nOdkładam rzut baki zawsze, by była na rano\nOd miasta do miasta tak se jeździmy z Adamo, yo\nZioło Bumblebee kupiłem takie jak Camaro\nOd ziomeczka, co dowozi co trzeba Bawarą\nTeż zmieniłem nazwę fury\nOpiera mi się o furę\nZniszczony od wódy bej, co chodzi jak karaluch\nNie oceniam nigdy, różnie bywa, zwęż te dupę\nWydech strzela suko jak z kałacha, jadę z hukiem\nWydech strzela suko jak z kałacha, jadę z hukiem\nTak za włosy ją ciągnąłem, że mam w dłoni pukiel\nSłuchasz bitu co trzy lata temu FORXST dał\nO tym mówię, czasem nie pilnuję swoich spraw\nI nie ronię łez, a jeśli już to to nie strach\nJednak zawsze ronię łzę, gdy ginie Tony Stark",
+      "song": "CASTROL",
+      "section": "zwrotka",
+      "correct_artist": "Guzior",
+      "qwen_prediction": "Żabson",
+      "qwen_confidence": 0.5273,
+      "gemma_prediction": "Guzior",
+      "gemma_confidence": 0.5547,
+      "options": [
+        "Żabson",
+        "White 2115",
+        "Guzior",
+        "Bedoes"
+      ]
+    },
+    {
+      "id": 9,
+      "verse": "Zanim go włożę do buzi napluję w ryj (tfu)\nKobieto milcz idź lepiej naczynia zmyj\nTo ja nauczyłem ich znaczenia słowa styl\nRobiąc rozpierdol na tej scenie #Czarnobyl\nKrawacik, mieszkanie w kredyt i fura w leasing\nA mi przy rozporku odznaczył się znowu lipstick\nWykałaczka w buzi, dresy - kanacki styl\nOdbija się kebabem jej, znaczy Malik tam był",
+      "song": "Ke6z",
+      "section": "zwrotka",
+      "correct_artist": "Malik Montana",
+      "qwen_prediction": "Kabe",
+      "qwen_confidence": 0.7734,
+      "gemma_prediction": "Malik Montana",
+      "gemma_confidence": 0.2734,
+      "options": [
+        "Malik Montana",
+        "Louis Villain",
+        "Quebonafide",
+        "Kabe"
+      ]
+    }
+  ],
+  "all_artists": [
+    "Avi",
+    "Bedoes",
+    "Diho",
+    "Guzior",
+    "Kabe",
+    "Louis Villain",
+    "Malik Montana",
+    "Mata",
+    "OG Olgierd",
+    "OKI",
+    "Oki",
+    "Pezet",
+    "Quebonafide",
+    "Sentino",
+    "Sobel",
+    "White 2115",
+    "Young Igi",
+    "Young Leosia",
+    "Zeamsone",
+    "Żabson"
+  ]
+}
