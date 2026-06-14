@@ -10,8 +10,10 @@ Użycie:
 
 import argparse
 import gc
+import importlib.util
 import json
 import os
+import platform
 import random
 import sys
 
@@ -56,6 +58,59 @@ def get_device() -> str:
     return "cpu"
 
 
+def is_unsloth_mlx() -> bool:
+    """Unsloth 2026.6+ routes Apple Silicon through MLX, which breaks PEFT."""
+    return (
+        os.environ.get("UNSLOTH_FORCE_GPU_PATH", "0") != "1"
+        and platform.system() == "Darwin"
+        and platform.machine() == "arm64"
+        and importlib.util.find_spec("mlx") is not None
+    )
+
+
+def configure_seq_cls_config(config, num_labels: int, label2id, id2label) -> None:
+    """Set label metadata on nested configs (needed for Qwen3.5 / Gemma4)."""
+    config.num_labels = num_labels
+    config.id2label = id2label
+    config.label2id = label2id
+    if hasattr(config, "get_text_config"):
+        text_config = config.get_text_config()
+        text_config.num_labels = num_labels
+        text_config.id2label = id2label
+        text_config.label2id = label2id
+
+
+def load_pytorch_seq_cls_model(
+    base_model: str,
+    adapter_dir: str,
+    num_labels: int,
+    label2id,
+    id2label,
+    device: str,
+    use_16bit: bool,
+):
+    """Load a sequence-classification PEFT model via PyTorch (MPS/CPU/CUDA)."""
+    from peft import PeftModel
+    from transformers import AutoConfig, AutoModelForSequenceClassification
+
+    config = AutoConfig.from_pretrained(base_model, trust_remote_code=False)
+    configure_seq_cls_config(config, num_labels, label2id, id2label)
+
+    dtype = torch.float16 if use_16bit and device != "cpu" else torch.float32
+    model = AutoModelForSequenceClassification.from_pretrained(
+        base_model,
+        config=config,
+        trust_remote_code=False,
+        torch_dtype=dtype,
+        device_map="cpu",
+    )
+    model = PeftModel.from_pretrained(model, adapter_dir)
+    model.eval()
+    if device != "cpu":
+        model = model.to(device)
+    return model
+
+
 def free_memory() -> None:
     """Zwolnij pamięć po modelu."""
     gc.collect()
@@ -93,33 +148,51 @@ def run_qwen_inference(verses: list[dict], label2id, id2label) -> list[dict]:
     """Załaduj Qwen3.5, klasyfikuj wszystkie zwrotki, zwolnij pamięć."""
     progress("qwen:loading")
 
-    os.environ["UNSLOTH_DISABLE_FAST_GENERATION"] = "1"
-    from unsloth import FastModel
-    from transformers import AutoModelForSequenceClassification, AutoTokenizer
+    from transformers import AutoConfig, AutoModelForSequenceClassification, AutoTokenizer
 
     DEVICE = get_device()
     MAX_LENGTH = 650  # jak w trening-qwen.ipynb
     NUM_LABELS = len(label2id)
     use_16bit = DEVICE != "cpu"
 
-    model, tokenizer = FastModel.from_pretrained(
-        model_name=QWEN_BASE_MODEL,
-        max_seq_length=MAX_LENGTH,
-        load_in_4bit=False,
-        load_in_16bit=use_16bit,
-        dtype=None if use_16bit else "float32",
-        auto_model=AutoModelForSequenceClassification,
-        num_labels=NUM_LABELS,
-        id2label=id2label,
-        label2id=label2id,
-        trust_remote_code=False,
-        ignore_mismatched_sizes=True,
-        use_exact_model_name=True,
-        device_map="auto",
-    )
+    if is_unsloth_mlx():
+        # Unsloth MLX backend returns mlx.nn models incompatible with PEFT.
+        config = AutoConfig.from_pretrained(QWEN_BASE_MODEL, trust_remote_code=False)
+        configure_seq_cls_config(config, NUM_LABELS, label2id, id2label)
+        dtype = torch.float16 if use_16bit and DEVICE != "cpu" else torch.float32
+        model = AutoModelForSequenceClassification.from_pretrained(
+            QWEN_BASE_MODEL,
+            config=config,
+            trust_remote_code=False,
+            torch_dtype=dtype,
+            device_map="cpu",
+        )
+        model = load_qwen_peft_model(model, QWEN_ADAPTER_DIR)
+        model.eval()
+        if DEVICE != "cpu":
+            model = model.to(DEVICE)
+    else:
+        os.environ["UNSLOTH_DISABLE_FAST_GENERATION"] = "1"
+        from unsloth import FastModel
 
-    model = load_qwen_peft_model(model, QWEN_ADAPTER_DIR)
-    model.eval()
+        model, _tokenizer = FastModel.from_pretrained(
+            model_name=QWEN_BASE_MODEL,
+            max_seq_length=MAX_LENGTH,
+            load_in_4bit=False,
+            load_in_16bit=use_16bit,
+            dtype=None if use_16bit else "float32",
+            auto_model=AutoModelForSequenceClassification,
+            num_labels=NUM_LABELS,
+            id2label=id2label,
+            label2id=label2id,
+            trust_remote_code=False,
+            ignore_mismatched_sizes=True,
+            use_exact_model_name=True,
+            device_map="auto",
+        )
+
+        model = load_qwen_peft_model(model, QWEN_ADAPTER_DIR)
+        model.eval()
 
     tokenizer = AutoTokenizer.from_pretrained(QWEN_ADAPTER_DIR)
     if not tokenizer.chat_template:
@@ -168,19 +241,9 @@ def run_qwen_inference(verses: list[dict], label2id, id2label) -> list[dict]:
 # --------------------------------------------------------------------------- #
 #  Inferencja Gemma4                                                           #
 # --------------------------------------------------------------------------- #
-def run_gemma_inference(verses: list[dict], label2id, id2label) -> list[dict]:
-    """Załaduj Gemma4, klasyfikuj wszystkie zwrotki, zwolnij pamięć."""
-    progress("gemma:loading")
-
-    os.environ["UNSLOTH_DISABLE_FAST_GENERATION"] = "1"
-    from unsloth import FastModel
-    from unsloth.chat_templates import get_chat_template
-    from peft import PeftModel
-    from transformers import (
-        AutoModel,
-        AutoModelForSequenceClassification,
-        AutoTokenizer,
-    )
+def _register_gemma4_seq_cls():
+    """Register Gemma4ForSequenceClassification (not in transformers auto-map)."""
+    from transformers import AutoModel
     from transformers.configuration_utils import PretrainedConfig
     from transformers.modeling_layers import GenericForSequenceClassification
     from transformers.models.auto.modeling_auto import (
@@ -189,7 +252,9 @@ def run_gemma_inference(verses: list[dict], label2id, id2label) -> list[dict]:
     from transformers.models.gemma4.configuration_gemma4 import Gemma4Config
     from transformers.models.gemma4.modeling_gemma4 import Gemma4PreTrainedModel
 
-    # Patch Gemma4
+    if Gemma4Config in MODEL_FOR_SEQUENCE_CLASSIFICATION_MAPPING:
+        return
+
     _orig_to_diff_dict = PretrainedConfig.to_diff_dict
 
     def _safe_to_diff_dict(self):
@@ -215,35 +280,72 @@ def run_gemma_inference(verses: list[dict], label2id, id2label) -> list[dict]:
         Gemma4Config, Gemma4ForSequenceClassification, exist_ok=True
     )
 
+
+def run_gemma_inference(verses: list[dict], label2id, id2label) -> list[dict]:
+    """Załaduj Gemma4, klasyfikuj wszystkie zwrotki, zwolnij pamięć."""
+    progress("gemma:loading")
+
+    _register_gemma4_seq_cls()
+
     DEVICE = get_device()
     MAX_LENGTH = 650
     NUM_LABELS = len(label2id)
     use_16bit = DEVICE != "cpu"
 
-    model, tokenizer = FastModel.from_pretrained(
-        model_name=GEMMA_BASE_MODEL,
-        max_seq_length=MAX_LENGTH,
-        load_in_4bit=False,
-        load_in_16bit=use_16bit,
-        dtype=None if use_16bit else "float32",
-        auto_model=AutoModelForSequenceClassification,
-        num_labels=NUM_LABELS,
-        id2label=id2label,
-        label2id=label2id,
-        trust_remote_code=False,
-        ignore_mismatched_sizes=True,
-        use_exact_model_name=True,
-        device_map="auto",
-    )
+    if is_unsloth_mlx():
+        model = load_pytorch_seq_cls_model(
+            GEMMA_BASE_MODEL,
+            GEMMA_ADAPTER_DIR,
+            NUM_LABELS,
+            label2id,
+            id2label,
+            DEVICE,
+            use_16bit,
+        )
+        from transformers import AutoTokenizer
 
-    model = PeftModel.from_pretrained(model, GEMMA_ADAPTER_DIR)
-    model.eval()
+        tokenizer = AutoTokenizer.from_pretrained(GEMMA_ADAPTER_DIR)
+    else:
+        os.environ["UNSLOTH_DISABLE_FAST_GENERATION"] = "1"
+        from unsloth import FastModel
+        from unsloth.chat_templates import get_chat_template
+        from peft import PeftModel
+        from transformers import (
+            AutoModelForSequenceClassification,
+            AutoTokenizer,
+        )
 
-    tokenizer = AutoTokenizer.from_pretrained(GEMMA_ADAPTER_DIR)
+        model, tokenizer = FastModel.from_pretrained(
+            model_name=GEMMA_BASE_MODEL,
+            max_seq_length=MAX_LENGTH,
+            load_in_4bit=False,
+            load_in_16bit=use_16bit,
+            dtype=None if use_16bit else "float32",
+            auto_model=AutoModelForSequenceClassification,
+            num_labels=NUM_LABELS,
+            id2label=id2label,
+            label2id=label2id,
+            trust_remote_code=False,
+            ignore_mismatched_sizes=True,
+            use_exact_model_name=True,
+            device_map="auto",
+        )
+
+        model = PeftModel.from_pretrained(model, GEMMA_ADAPTER_DIR)
+        model.eval()
+
+        tokenizer = AutoTokenizer.from_pretrained(GEMMA_ADAPTER_DIR)
+
     if not tokenizer.chat_template:
+        from unsloth.chat_templates import get_chat_template
+
         tokenizer = get_chat_template(tokenizer, chat_template="gemma-4")
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
+
+    text_config = model.config.get_text_config()
+    text_config.pad_token_id = tokenizer.pad_token_id
+    model.config.pad_token_id = tokenizer.pad_token_id
 
     progress("gemma:ready")
 
