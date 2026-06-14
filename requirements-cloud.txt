@@ -1,9 +1,10 @@
 # Zależności do treningu na Linux (GPU).
 # Nie używaj requirements.txt (zawiera wersje Windows: torch+cu128, triton-windows).
+# unsloth 2026.6.1 wymaga transformers<=5.5.0; Gemma 4 i Qwen 3.5 działają na 5.5.0.
 unsloth==2026.6.1
 unsloth_zoo==2026.6.1
 cut-cross-entropy==25.1.1
-transformers==5.10.2
+transformers==5.5.0
 tokenizers==0.22.2
 accelerate==1.13.0
 peft==0.19.1
