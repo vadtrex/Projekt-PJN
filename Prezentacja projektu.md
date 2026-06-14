@@ -1,13 +1,97 @@
-# Prezentacja projektu
+---
+marp: true
+theme: gaia
+class: invert
+headingDivider: 2
+paginate: true
+size: 16:9
+style: |
+  :root {
+    --color-background: #1c1c1c;
+    --color-foreground: #d4d4d4;
+    --color-highlight: #f5f5f5;
+    --color-dimmed: #888;
+    --color-background-code: #2a2a2a;
+    --color-background-paginate: rgba(255, 255, 255, 0.08);
+  }
+  section {
+    font-size: 24px;
+    line-height: 1.3;
+    font-family: 'Segoe UI', sans-serif;
+    justify-content: flex-start;
+    padding: 48px 56px 40px;
+    background: #1c1c1c;
+    color: #d4d4d4;
+  }
+  h2 {
+    font-size: 1.35em;
+    margin: 0 0 0.35em 0;
+    color: #f5f5f5 !important;
+    font-weight: 600;
+  }
+  p, ul, ol {
+    margin: 0.2em 0;
+  }
+  li {
+    margin: 0.1em 0;
+    font-size: 0.9em;
+    line-height: 1.28;
+    color: #d4d4d4;
+  }
+  li::marker {
+    color: #888;
+  }
+  strong {
+    color: #f5f5f5 !important;
+    font-weight: 600;
+  }
+  em {
+    color: #b0b0b0 !important;
+  }
+  code {
+    background: #2a2a2a !important;
+    color: #e0e0e0 !important;
+  }
+  table {
+    font-size: 0.72em;
+    width: 100%;
+    margin-top: 0.25em;
+    border-collapse: collapse;
+  }
+  th, td {
+    color: #d4d4d4 !important;
+    background: #242424 !important;
+    border: 1px solid #555 !important;
+    padding: 0.2em 0.45em;
+  }
+  th {
+    background: #333 !important;
+    color: #f5f5f5 !important;
+    font-weight: 600;
+  }
+  section.lead {
+    justify-content: center;
+    text-align: center;
+  }
+  section.lead h2 {
+    font-size: 1.6em;
+  }
+  section.lead p {
+    font-size: 1.05em;
+    color: #b0b0b0 !important;
+  }
+---
+
+<!-- _class: lead -->
+
+## Prezentacja projektu
 
 **Model LLM do klasyfikacji zwrotek polskiego rapu**
 
-## Problem i cel
+## Zakres projektu
 
-- **Problem:** czy model językowy potrafi rozpoznać autora zwrotki wyłącznie po stylu językowym, słownictwie i charakterystycznych zwrotach?
-- **Zastosowanie:** edukacyjna gra quizowa „Kto rapuje?” — użytkownik zgaduje wykonawcę, a system pokazuje predykcje obu modeli z poziomem pewności.
-- **Wyzwania:** podobne style w polskim rapie, wspólne refreny, kolaboracje wielu artystów, szum w tekstach pobranych z internetu.
-- **Metryka sukcesu:** accuracy i macro-F1 na zbiorze testowym oraz porównanie człowiek vs Qwen vs Gemma w quizie.
+- **Cel:** dostrojenie **Qwen3.5-4B** i **Gemma-4-E2B** metodą **LoRA** do klasyfikacji zwrotek polskiego rapu (**20** klas - artystów).
+- **Dane:** samodzielne przygotowanie datasetu przez pobranie tekstów z Genius, parsowanie na zwrotki i czyszczenie.
 
 ## Proces
 
